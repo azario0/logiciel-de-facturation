@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add Billing for {{ customer.name }}</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.product_id.label }}
+        <select name="product_id" required>
+            {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }} - {{ "%.2f"|format(product.price) }} DZD</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        {{ form.quantity.label }}
+        {{ form.quantity() }}
+    </div>
+    {{ form.submit() }}
+</form>
+{% endblock %}

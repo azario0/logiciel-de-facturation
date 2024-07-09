@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Create Invoice</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.customer_name.label }}
+        {{ form.customer_name() }}
+    </div>
+    <div>
+        {{ form.amount.label }}
+        {{ form.amount() }}
+    </div>
+    {{ form.submit() }}
+</form>
+{% endblock %}

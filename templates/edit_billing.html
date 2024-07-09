@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Billing</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.amount.label }}
+        {{ form.amount() }}
+    </div>
+    {{ form.submit() }}
+</form>
+{% endblock %}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing for {{ customer.name }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Billing for {{ customer.name }}</h1>
+    {% set grand_total = namespace(value=0) %}
+    {% for date, day_billings in grouped_billings %}
+        <h2>Date: {{ date.strftime('%Y-%m-%d') }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Billing ID</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price (DZD)</th>
+                    <th>Total (DZD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set day_total = namespace(value=0) %}
+                {% for billing in day_billings %}
+                    {% for item in billing.items %}
+                    <tr>
+                        <td>{{ billing.id }}</td>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ "%.2f"|format(item.product.price) }}</td>
+                        {% set item_total = item.quantity * item.product.price %}
+                        <td>{{ "%.2f"|format(item_total) }}</td>
+                        {% set day_total.value = day_total.value + item_total %}
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>Day Total: {{ "%.2f"|format(day_total.value) }} DZD</p>
+        {% set grand_total.value = grand_total.value + day_total.value %}
+    {% endfor %}
+    <h2>Grand Total: {{ "%.2f"|format(grand_total.value) }} DZD</h2>
+</body>
+</html>
